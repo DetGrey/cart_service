@@ -6,6 +6,7 @@
 
 from flask import Flask, jsonify, request
 from cart import select_all_items, find_item_by_id, add_new_item, delete_item_by_id, update_amount
+import requests
 
 app = Flask(__name__)
 
@@ -13,6 +14,21 @@ app = Flask(__name__)
 @app.route('/cart', methods=['GET'])
 def get_cart_items():
     result = select_all_items()
+
+    if result[0] == 200:
+        cart_items = []
+        for item in result[1]:
+            product = get_product_by_id(item["product_id"])
+            if product:
+                cart_items.append({
+                    "id": item["id"],
+                    "product": product[0],
+                    "amount": item["amount"]
+                })
+
+        result[1] = cart_items
+
+
     return jsonify(result[1]), result[0]
 
 # Add a product to cart
@@ -60,5 +76,13 @@ def update_product_amount(id):
     result = update_amount(id, amount)
     return jsonify(result[1]), result[0]
 
+def get_product_by_id(id):
+    url = f'http://product_catalog_service:5000/products/{id}'
+    req = requests.get(url)
+    if req.status_code == 200:
+        return req.json()
+    
+    return None
 
-app.run(debug=True, host='0.0.0.0', port=5050)
+
+app.run(debug=True, host='0.0.0.0', port=5001)

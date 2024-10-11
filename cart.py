@@ -71,7 +71,7 @@ def select_all_items():
             data = cur.fetchall()
         
             if data:
-                return [200, [dict(row) for row in data][0]]
+                return [200, [dict(row) for row in data]]
             else:
                 return [204, {"message": "No items in cart"}]
     
