@@ -55,8 +55,6 @@ Tilbyder funktioner til at tilføje, fjerne og opdatere varer i kurven.
   - **404 Not Found:** Item not found
   - **500:** Some error happened
 
-*(Bemærk: Dette endpoint opdaterer i øjeblikket ikke nogen data og returnerer et pladsholderrespons.)*
-
 ### Update product amount
 
 - **URL:** `/cart/<id>`
